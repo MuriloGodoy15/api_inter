@@ -1,22 +1,30 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+import requests as request
 
 app = FastAPI()
 
-mock_data = {
-    "status": "Operando normalmente",
-    "consumo": "3.0 kW",
-    "geracao": "4.0 kW"
-}
+goodwe_api_url = "http://localhost:8001/"
 
 @app.get("/status")
 def get_status():
-    return {"status": mock_data["status"]}
-
+    try:
+        r = request.get(f"{goodwe_api_url}/status")
+        return r.json()
+    except: 
+        return {"error": "Failed to fetch status from GoodWe API"}
+   
 @app.get("/consumo")
 def get_consumo():
-    return {"consumo": mock_data["consumo"]}
+    try:
+        r = request.get(f"{goodwe_api_url}/consumo")
+        return r.json()
+    except: 
+        return {"error": "Failed to fetch consumo from GoodWe API"}
 
 @app.get("/geracao")
 def get_geracao():
-    return {"geracao": mock_data["geracao"]}
+    try:
+        r = request.get(f"{goodwe_api_url}/geracao")
+        return r.json()
+    except: 
+        return {"error": "Failed to fetch geracao from GoodWe API"}
