@@ -28,3 +28,72 @@ def get_geracao():
         return r.json()
     except: 
         return {"error": "Failed to fetch geracao from GoodWe API"}
+    
+@app.get("/")
+def root():
+    return {"message": "está no ar"}
+
+@app.post("/alexa")
+async def handle_alexa(request: request):
+    body = await request.json()
+    intent_name = body['request']['intent']['name']
+
+    if intent_name == 'GetConsumoIntent':
+        consumo = get_consumo()
+        return {
+            "version": "1.0",
+            "response": {
+                "outputSpeech": {
+                    "type": "PlainText",
+                    "text": f"Seu consumo atual é de {consumo['consumo']} KW/h"
+                },
+                "shouldEndSession": True
+            }
+        }
+    return{
+            "version": "1.0",
+            "response": {
+                "outputSpeech": {
+                    "type": "PlainText",
+                    "text": f"Não entendi o comando"
+                },
+                "shouldEndSession": True
+            }
+        }
+
+    if intent_name == 'GetStatusIntent':
+        status = get_status()
+        return {
+            "version": "1.0",
+            "response": {
+                "outputSpeech": {
+                    "type": "PlainText",
+                    "text": f"Seu status atual é de {status['status']} KW/h"
+                },
+                "shouldEndSession": True
+            }
+        }
+
+    return{
+            "version": "1.0",
+            "response": {
+                "outputSpeech": {
+                    "type": "PlainText",
+                    "text": f"Não entendi o comando"
+                },
+                "shouldEndSession": True
+            }
+        }
+
+    if intent_name == 'GetGeracaoIntent':
+        geracao = get_geracao()
+        return {
+            "version": "1.0",
+            "response": {
+                "outputSpeech": {
+                    "type": "PlainText",
+                    "text": f"Sua geração atual é de {geracao['geracao']} KW/h"
+                },
+                "shouldEndSession": True
+            }
+        }
