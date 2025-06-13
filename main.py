@@ -3,7 +3,7 @@ import requests as request
 
 app = FastAPI()
 
-oodwe_api_url = "https://apigoodwe.onrender.com"
+goodwe_api_url = "https://apigoodwe.onrender.com"
 
 @app.get("/status")
 def get_status():
