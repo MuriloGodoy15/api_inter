@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 import requests as request
-from apigoodwe import goodwe
 
 app = FastAPI()
 
