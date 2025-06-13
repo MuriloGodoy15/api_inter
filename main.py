@@ -50,6 +50,7 @@ async def handle_alexa(request: request):
                 "shouldEndSession": True
             }
         }
+    
     return{
             "version": "1.0",
             "response": {
@@ -60,42 +61,5 @@ async def handle_alexa(request: request):
                 "shouldEndSession": True
             }
         }
-
-    if intent_name == 'GetStatusIntent':
-        status = get_status()
-        return {
-            "version": "1.0",
-            "response": {
-                "outputSpeech": {
-                    "type": "PlainText",
-                    "text": f"Seu status atual é de {status['status']} KW/h"
-                },
-                "shouldEndSession": True
-            }
-        }
-
-    return{
-            "version": "1.0",
-            "response": {
-                "outputSpeech": {
-                    "type": "PlainText",
-                    "text": f"Não entendi o comando"
-                },
-                "shouldEndSession": True
-            }
-        }
-
-    if intent_name == 'GetGeracaoIntent':
-        geracao = get_geracao()
-        return {
-            "version": "1.0",
-            "response": {
-                "outputSpeech": {
-                    "type": "PlainText",
-                    "text": f"Sua geração atual é de {geracao['geracao']} KW/h"
-                },
-                "shouldEndSession": True
-            }
-        }
-        return
+        return 
     JSONResponse(content=response)
