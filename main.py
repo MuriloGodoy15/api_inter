@@ -97,3 +97,5 @@ async def handle_alexa(request: request):
                 "shouldEndSession": True
             }
         }
+        return
+    JSONResponse(content=response)
