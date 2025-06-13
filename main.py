@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 import requests as request
+from apigoodwe import goodwe
 
 app = FastAPI()
 
-goodwe_api_url = "http://localhost:8001/"
+
 
 @app.get("/status")
 def get_status():
@@ -61,5 +62,5 @@ async def handle_alexa(request: request):
                 "shouldEndSession": True
             }
         }
-        return 
+    return 
     JSONResponse(content=response)
