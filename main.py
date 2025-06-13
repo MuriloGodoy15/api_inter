@@ -4,7 +4,7 @@ from apigoodwe import goodwe
 
 app = FastAPI()
 
-
+oodwe_api_url = "https://apigoodwe.onrender.com"
 
 @app.get("/status")
 def get_status():
