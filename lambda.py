@@ -1,5 +1,5 @@
+
 import logging
-import random
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler, AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
@@ -10,31 +10,20 @@ logger.setLevel(logging.INFO)
 
 sb = SkillBuilder()
 
-# ===== Handlers =====
-
 class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("LaunchRequestHandler executado")
-        speak_output = "Bem-vindo ao Monitoramento da GoodWe! Pergunte sobre status, consumo ou geração."
-        return (
-            handler_input.response_builder
-            .speak(speak_output)
-            .ask("O que você gostaria de saber?")
-            .response
-        )
+        speak_output = "Bem-vindo ao Monitoramento GoodWe! Você pode perguntar sobre status, consumo ou geração."
+        return handler_input.response_builder.speak(speak_output).ask("O que você gostaria de saber?").response
 
 class GetStatusIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("GetStatusIntent")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("GetStatusIntentHandler executado")
-        data = get_status_data()
-        status = data.get("status", "indisponível")
-        speak_output = f"O status atual é: {status}."
+        speak_output = "O status atual é: operacional."
         return handler_input.response_builder.speak(speak_output).response
 
 class GetConsumoIntentHandler(AbstractRequestHandler):
@@ -42,10 +31,7 @@ class GetConsumoIntentHandler(AbstractRequestHandler):
         return is_intent_name("GetConsumoIntent")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("GetConsumoIntentHandler executado")
-        data = get_consumo_data()
-        consumo = data.get("consumo", "indisponível")
-        speak_output = f"O consumo atual é de {consumo}."
+        speak_output = "O consumo atual é de 2.5 quilowatt-hora."
         return handler_input.response_builder.speak(speak_output).response
 
 class GetGeracaoIntentHandler(AbstractRequestHandler):
@@ -53,10 +39,7 @@ class GetGeracaoIntentHandler(AbstractRequestHandler):
         return is_intent_name("GetGeracaoIntent")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("GetGeracaoIntentHandler executado")
-        data = get_geracao_data()
-        geracao = data.get("geracao", "indisponível")
-        speak_output = f"A geração atual é de {geracao}."
+        speak_output = "A geração atual é de 4.3 quilowatt-hora."
         return handler_input.response_builder.speak(speak_output).response
 
 class FallbackIntentHandler(AbstractRequestHandler):
@@ -64,21 +47,14 @@ class FallbackIntentHandler(AbstractRequestHandler):
         return is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("FallbackIntentHandler executado")
-        speak_output = "Desculpe, não entendi. Pergunte sobre status, consumo ou geração."
-        return (
-            handler_input.response_builder
-            .speak(speak_output)
-            .ask("Por favor, repita sua pergunta.")
-            .response
-        )
+        speak_output = "Desculpe, não entendi. Você pode perguntar sobre status, consumo ou geração."
+        return handler_input.response_builder.speak(speak_output).ask("Pode repetir?").response
 
 class SessionEndedRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("SessionEndedRequestHandler executado")
         return handler_input.response_builder.response
 
 class GlobalExceptionHandler(AbstractExceptionHandler):
@@ -86,11 +62,9 @@ class GlobalExceptionHandler(AbstractExceptionHandler):
         return True
 
     def handle(self, handler_input, exception):
-        logger.error(f"Exceção global: {exception}", exc_info=True)
+        logger.error(exception, exc_info=True)
         speak_output = "Ocorreu um erro inesperado. Tente novamente mais tarde."
         return handler_input.response_builder.speak(speak_output).ask(speak_output).response
-
-# ===== Registro dos Handlers =====
 
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(GetStatusIntentHandler())
@@ -98,9 +72,6 @@ sb.add_request_handler(GetConsumoIntentHandler())
 sb.add_request_handler(GetGeracaoIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
-
 sb.add_exception_handler(GlobalExceptionHandler())
-
-# ===== Handler Lambda =====
 
 lambda_handler = sb.lambda_handler()
